@@ -1,35 +1,44 @@
-%define release_name Moser
-%define dist_version 20
-%define bug_version 20
+%define release_name Obree
+%define dist_version 21
+%define bug_version 21
 
 Summary:        Chapeau release files
 Name:           chapeau-release
-Version:        20
-Release:        2
+Version:        21
+Release:        1
 License:        GPLv2
 Group:          System Environment/Base
 URL:            http://chapeaulinux.org
 Source:         %{name}-%{version}.tar.bz2
 Obsoletes:      redhat-release
-Obsoletes:      fedora-release
 Obsoletes:      generic-release
-Provides:       redhat-release
-Provides:       system-release = %{version}-%{release}
 Obsoletes:      fedora-release-rawhide < 20-0.5
 Obsoletes:      generic-release-rawhide
+Obsoletes:      fedora-release
+Obsoletes:      fedora-release-cloud
+Obsoletes:      fedora-release-server
+Obsoletes:      fedora-release-nonproduct
+Obsoletes:      fedora-release-workstation
+
+Provides:       redhat-release
+Provides:       system-release
+Provides:       system-release(%{version})
+Provides:       system-release-workstation
+Provides:       system-release-workstation(%{version})
+Provides:       system-release-product
+
+Requires:       fedora-repos(%{version})
+Requires:       chapeau-repos
+# needed for captive portal support
+Requires:       NetworkManager-config-connectivity-fedora
+Requires(post): /usr/bin/glib-compile-schemas
+Requires(postun): /usr/bin/glib-compile-schemas
+
 BuildArch:       noarch
 
+
 %description
-Chapeau release files such as yum configs and various /etc/ files that
-define the release.
-
-%package rawhide
-Summary:        Rawhide repo definitions
-Requires:       chapeau-release = %{version}-%{release}
-
-%description rawhide
-This package provides the rawhide repo definitions.
-
+Chapeau release files that define the release.
 
 %prep
 %setup -q
@@ -65,36 +74,9 @@ REDHAT_SUPPORT_PRODUCT="Fedora"
 REDHAT_SUPPORT_PRODUCT_VERSION=%{bug_version}
 EOF
 
-# Install the keys
-install -d -m 755 $RPM_BUILD_ROOT/etc/pki/rpm-gpg
-install -m 644 RPM-GPG-KEY* $RPM_BUILD_ROOT/etc/pki/rpm-gpg/
-
-# Link the primary/secondary keys to arch files, according to archmap.
-# Ex: if there's a key named RPM-GPG-KEY-fedora-19-primary, and archmap
-#     says "fedora-19-primary: i386 x86_64",
-#     RPM-GPG-KEY-fedora-19-{i386,x86_64} will be symlinked to that key.
-pushd $RPM_BUILD_ROOT/etc/pki/rpm-gpg/
-for keyfile in RPM-GPG-KEY*; do
-    key=${keyfile#RPM-GPG-KEY-} # e.g. 'fedora-20-primary'
-    arches=$(sed -ne "s/^${key}://p" $RPM_BUILD_DIR/%{name}-%{version}/archmap) \
-        || echo "WARNING: no archmap entry for $key"
-    for arch in $arches; do
-        # replace last part with $arch (fedora-20-primary -> fedora-20-$arch)
-        ln -s $keyfile ${keyfile%%-*}-$arch # NOTE: RPM replaces %% with %
-    done
-done
-# and add symlink for compat generic location
-ln -s RPM-GPG-KEY-fedora-%{dist_version}-primary RPM-GPG-KEY-%{dist_version}-fedora
-popd
-
-install -d -m 755 $RPM_BUILD_ROOT/etc/yum.repos.d
-for file in fedora*repo chapeau.repo ; do
-  install -m 644 $file $RPM_BUILD_ROOT/etc/yum.repos.d
-done
-
 # Set up the dist tag macros
-install -d -m 755 $RPM_BUILD_ROOT/etc/rpm
-cat >> $RPM_BUILD_ROOT/etc/rpm/macros.dist << EOF
+install -d -m 755 $RPM_BUILD_ROOT%{_rpmconfigdir}/macros.d
+cat >> $RPM_BUILD_ROOT%{_rpmconfigdir}/macros.d/macros.dist << EOF
 # dist macros.
 
 %%fedora                %{dist_version}
@@ -102,33 +84,44 @@ cat >> $RPM_BUILD_ROOT/etc/rpm/macros.dist << EOF
 %%fc%{dist_version}                1
 EOF
 
+# Override the list of enabled gnome-shell extensions for Workstation
+#mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas/
+#install -m 0644 org.gnome.shell.gschema.override %{buildroot}%{_datadir}/glib-2.0/schemas/
+
+%postun
+if [ $1 -eq 0 ] ; then
+    glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+fi
+
+%posttrans
+glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc GPL Fedora-Legal-README.txt
+%{!?_licensedir:%global license %%doc}
+%license LICENSE Fedora-Legal-README.txt
 %config %attr(0644,root,root) /etc/os-release
 %config %attr(0644,root,root) /etc/fedora-release
 /etc/redhat-release
 /etc/system-release
 %config %attr(0644,root,root) /etc/system-release-cpe
-%dir /etc/yum.repos.d
-%config(noreplace) /etc/yum.repos.d/fedora.repo
-%config(noreplace) /etc/yum.repos.d/fedora-updates*.repo
-%config(noreplace) /etc/yum.repos.d/chapeau*.repo
 %config(noreplace) %attr(0644,root,root) /etc/issue
 %config(noreplace) %attr(0644,root,root) /etc/issue.net
-%config %attr(0644,root,root) /etc/rpm/macros.dist
-%dir /etc/pki/rpm-gpg
-/etc/pki/rpm-gpg/*
+%attr(0644,root,root) %{_rpmconfigdir}/macros.d/macros.dist
 
-%files rawhide
-%defattr(-,root,root,-)
-%config(noreplace) /etc/yum.repos.d/fedora-rawhide.repo
+%{!?_licensedir:%global license %%doc}
+%license LICENSE
+#%{_datadir}/glib-2.0/schemas/org.gnome.shell.gschema.override
 
 
 %changelog
+* Sat Jan 03 2015 Vince Pooley <vince@chapeaulinux.org> - 21
+- Updated for Chapeau 21 from Fedora 21 workstation release
+- package 'fedora-release'
+
 * Tue Jan 14 2014 Vince Pooley <vince@chapeaulinux.org> - 20
 - First chapeau-release rpm
 - A bit overdue, prior to this Chapeau's release details were

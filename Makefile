@@ -1,6 +1,6 @@
-VERSION=$(shell awk '/Version:/ { print $$2 }' chapeau-release.spec)
-RELEASE=$(shell awk '/Release:/ { print $$2 }' chapeau-release.spec)
-GITTAG=chapeau-release-$(VERSION)
+VERSION=$(shell awk '/Version:/ { print $$2 }' fedora-release.spec)
+RELEASE=$(shell awk '/Release:/ { print $$2 }' fedora-release.spec)
+GITTAG=fedora-release-$(VERSION)
 
 all:
 

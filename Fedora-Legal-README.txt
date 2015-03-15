@@ -1,3 +1,12 @@
+= License =
+
+Fedora is a compilation of software packages, each under its own
+license.  The compilation itself is released under the MIT license
+(see the file LICENSE). However, this compilation license does not
+supersede the licenses of code and content contained in Fedora, which
+conform to the legal guidelines described at
+https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing.
+
 = Source Availability =
 
 A complete machine-readable copy of the source code corresponding to
@@ -9,8 +18,7 @@ distribution of this release by Red Hat, Inc.
 To obtain such source code, send a check or money order in the amount of
 US $10.00 to: 
 
-Fedora Legal c/o Red Hat, Inc. | 1801 Varsity Drive | Raleigh, NC 27606
-USA
+Vice President, Intellectual Property | Red Hat, Inc. | 100 East Davie Street | Raleigh, NC 27601 USA
 Please write "source for Fedora @@VERSION@@" in the memo line of your payment.
 
 You may also access a copy of this source code at:

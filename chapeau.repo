@@ -1,6 +1,0 @@
-[chapeau]
-name=Chapeau $releasever - $basearch
-baseurl=http://chapeaulinux.org/repo/$releasever/$basearch/
-enabled=1
-gpgcheck=0
-skip_if_unavailable=0
