@@ -1,10 +1,10 @@
-%define release_name Obree
-%define dist_version 21
-%define bug_version 21
+%define release_name Indurain
+%define dist_version 22
+%define bug_version 22
 
 Summary:        Chapeau release files
 Name:           chapeau-release
-Version:        21
+Version:        22
 Release:        1
 License:        GPLv2
 Group:          System Environment/Base
@@ -118,6 +118,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 21
+- Updated for Chapeau 22
+
 * Sat Jan 03 2015 Vince Pooley <vince@chapeaulinux.org> - 21
 - Updated for Chapeau 21 from Fedora 21 workstation release
 - package 'fedora-release'
