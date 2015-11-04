@@ -1,10 +1,10 @@
-%define release_name Indurain
-%define dist_version 22
-%define bug_version 22
+%define release_name Armstrong
+%define dist_version 23
+%define bug_version 23
 
 Summary:        Chapeau release files
 Name:           chapeau-release
-Version:        22
+Version:        23
 Release:        1
 License:        GPLv2
 Group:          System Environment/Base
@@ -41,7 +41,7 @@ BuildArch:       noarch
 Chapeau release files that define the release.
 
 %prep
-%setup -q
+%setup -c
 sed -i 's|@@VERSION@@|%{dist_version}|g' Fedora-Legal-README.txt
 
 %build
@@ -118,7 +118,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 21
+* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 23
+- Updated for Chapeau 23 (Armstrong)
+
+* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 22
 - Updated for Chapeau 22
 
 * Sat Jan 03 2015 Vince Pooley <vince@chapeaulinux.org> - 21
