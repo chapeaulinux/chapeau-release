@@ -5,7 +5,7 @@
 Summary:        Chapeau release files
 Name:           chapeau-release
 Version:        23
-Release:        1
+Release:        2
 License:        GPLv2
 Group:          System Environment/Base
 URL:            http://chapeaulinux.org
@@ -85,8 +85,11 @@ cat >> $RPM_BUILD_ROOT%{_rpmconfigdir}/macros.d/macros.dist << EOF
 EOF
 
 # Override the list of enabled gnome-shell extensions for Workstation
-#mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas/
-#install -m 0644 org.gnome.shell.gschema.override %{buildroot}%{_datadir}/glib-2.0/schemas/
+# mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas/
+# install -m 0644 org.gnome.shell.gschema.override %{buildroot}%{_datadir}/glib-2.0/schemas/
+
+%post
+sed -i 's|Wayand|Wayland|g' %{_sysconfdir}/gdm/custom.conf
 
 %postun
 if [ $1 -eq 0 ] ; then
@@ -118,7 +121,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 23
+* Sun Dec 13 2015 Vince Pooley <vince@chapeaulinux.org> - 23.0.2
+- Insert post scriptlet to fix Wayland typo in /etc/gdm/custom.conf
+
+* Thu Nov 05 2015 Vince Pooley <vince@chapeaulinux.org> - 23
 - Updated for Chapeau 23 (Armstrong)
 
 * Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 22
