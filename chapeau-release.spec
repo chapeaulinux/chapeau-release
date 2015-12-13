@@ -41,7 +41,7 @@ BuildArch:       noarch
 Chapeau release files that define the release.
 
 %prep
-%setup -q
+%setup -c
 sed -i 's|@@VERSION@@|%{dist_version}|g' Fedora-Legal-README.txt
 
 %build
@@ -123,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sun Dec 13 2015 Vince Pooley <vince@chapeaulinux.org> - 22.2
 - Insert post scriptlet to fix Wayland typo in /etc/gdm/custom.conf
+- Changed setup macro option to -c
 
 * Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 22
 - Updated for Chapeau 22
