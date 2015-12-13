@@ -5,7 +5,7 @@
 Summary:        Chapeau release files
 Name:           chapeau-release
 Version:        22
-Release:        1
+Release:        2
 License:        GPLv2
 Group:          System Environment/Base
 URL:            http://chapeaulinux.org
@@ -88,6 +88,9 @@ EOF
 #mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas/
 #install -m 0644 org.gnome.shell.gschema.override %{buildroot}%{_datadir}/glib-2.0/schemas/
 
+%post
+sed -i 's|Wayand|Wayland|g' %{_sysconfdir}/gdm/custom.conf
+
 %postun
 if [ $1 -eq 0 ] ; then
     glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
@@ -118,7 +121,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 21
+* Sun Dec 13 2015 Vince Pooley <vince@chapeaulinux.org> - 22.2
+- Insert post scriptlet to fix Wayland typo in /etc/gdm/custom.conf
+
+* Sun Mar 08 2015 Vince Pooley <vince@chapeaulinux.org> - 22
 - Updated for Chapeau 22
 
 * Sat Jan 03 2015 Vince Pooley <vince@chapeaulinux.org> - 21
