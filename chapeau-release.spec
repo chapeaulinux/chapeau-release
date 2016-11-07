@@ -1,11 +1,11 @@
-%define release_name Armstrong
-%define dist_version 23
-%define bug_version 23
+%define release_name Cancellara
+%define dist_version 24
+%define bug_version 24
 
 Summary:        Chapeau release files
 Name:           chapeau-release
-Version:        23
-Release:        2
+Version:        24
+Release:        1
 License:        GPLv2
 Group:          System Environment/Base
 URL:            http://chapeaulinux.org
@@ -121,6 +121,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Sep 10 2016 Vince Pooley <vince@chapeaulinux.org> - 24
+- Updated for Chapeau 24
+
 * Sun Dec 13 2015 Vince Pooley <vince@chapeaulinux.org> - 23.0.2
 - Insert post scriptlet to fix Wayland typo in /etc/gdm/custom.conf
 
